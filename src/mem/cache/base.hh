@@ -898,6 +898,16 @@ class BaseCache : public ClockedObject
     const bool isReadOnly;
 
     /**
+      * Is this cache divided by way partitioning.
+      */
+    const bool isDivided;
+
+    /*
+     * Pointer for way partitioning.
+     */
+    int divPtr = -1;
+
+    /**
      * Bit vector of the blocking reasons for the access path.
      * @sa #BlockedCause
      */
