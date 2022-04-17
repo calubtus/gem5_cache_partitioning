@@ -156,14 +156,14 @@ if options.bench:
                 process.executable = bin_dir+'spec2006/bzip2/bzip2_base.arm71'
                 data = bin_dir+'spec2006/bzip2/test/input/chicken.jpg'
                 output = bin_dir+'spec2006/bzip2/input.program.out'
-                process.cmd = [process.executable] + [data] + ['30'] + ['>'] +
-                              [output] + ['2>'] +
+                process.cmd = [process.executable] + [data] + ['30'] + \
+                              ['>'] + [output] + ['2>'] + \
                               [bin_dir+'spec2006/bzip2/chicken.err']
         elif app == 'libquantum':
-                process.executable = bin_dir+
-                                'spec2006/libquantum/libquantum_base.armv71'
+                process.executable = bin_dir+ \
+                            'spec2006/libquantum/libquantum_base.armv71'
                 process.cmd = [process.executable] + ['1397 8']
-                process.output =
+                process.output = \
                             bin_dir+'spec2006/libquantum/libquantum_ref.out'
         elif app == 'a2time01':
                 process.executable = bin_dir+'embedded/A2TIME01'
