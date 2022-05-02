@@ -102,6 +102,7 @@ BaseCache::BaseCache(const BaseCacheParams *p, unsigned blk_size)
       forwardSnoops(true),
       clusivity(p->clusivity),
       isReadOnly(p->is_read_only),
+      isDivided(p->is_divided),
       blocked(0),
       order(0),
       noTargetMSHR(nullptr),
@@ -124,6 +125,9 @@ BaseCache::BaseCache(const BaseCacheParams *p, unsigned blk_size)
     tags->tagsInit();
     if (prefetcher)
         prefetcher->setCache(this);
+
+    if (isDivided)
+        divPtr = p->div_ptr;
 }
 
 BaseCache::~BaseCache()
@@ -1430,15 +1434,17 @@ BaseCache::allocateBlock(const PacketPtr pkt, PacketList &writebacks)
 
     // Find replacement victim
     std::vector<CacheBlk*> evict_blks;
+    int contextId = pkt->req->hasContextId() ? pkt->req->contextId(): -1;
     CacheBlk *victim = tags->findVictim(addr, is_secure, blk_size_bits,
-                                        evict_blks);
+      evict_blks, contextId, divPtr);
 
     // It is valid to return nullptr if there is no victim
     if (!victim)
         return nullptr;
 
     // Print victim block's information
-    DPRINTF(CacheRepl, "Replacement victim: %s\n", victim->print());
+    DPRINTF(CacheRepl, "cpu%d-Replacement victim: %s\n", contextId,
+      victim->print());
 
     // Try to evict blocks; if it fails, give up on allocation
     if (!handleEvictions(evict_blks, writebacks)) {

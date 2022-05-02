@@ -144,6 +144,9 @@ class BaseCache(ClockedObject):
     # data cache.
     write_allocator = Param.WriteAllocator(NULL, "Write allocator")
 
+    is_divided = Param.Bool(False, "Way-partitioning")
+    div_ptr = Param.Int(0, "Pointer for way-partitioning")
+
 class Cache(BaseCache):
     type = 'Cache'
     cxx_header = 'mem/cache/cache.hh'
@@ -156,4 +159,3 @@ class NoncoherentCache(BaseCache):
     # This is typically a last level cache and any clean
     # writebacks would be unnecessary traffic to the main memory.
     writeback_clean = False
-

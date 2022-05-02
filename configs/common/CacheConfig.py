@@ -202,6 +202,11 @@ def config_cache(options, system):
         else:
             system.cpu[i].connectAllPorts(system.membus)
 
+    # Way-Partition
+    if options.l2cache and options.div_ptr > 0:
+        system.l2.is_divided = True
+        system.l2.div_ptr = options.div_ptr
+
     return system
 
 # ExternalSlave provides a "port", but when that port connects to a cache,
